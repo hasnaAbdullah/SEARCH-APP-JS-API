@@ -4,8 +4,9 @@ const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
 async function fetchNews() {
   try {
+    const proxyUrl = "https://corsproxy.io/?"; // Proxy URL
     const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apiKey}`;
-    const response = await fetch(apiUrl);
+    const response = await fetch(proxyUrl + apiUrl);
     const data = await response.json();
     displayNews(data.articles);
   } catch (err) {
