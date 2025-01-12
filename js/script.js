@@ -8,6 +8,7 @@ async function fetchNews() {
     const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apiKey}`;
     const response = await fetch(proxyUrl + apiUrl);
     const data = await response.json();
+    console.log(data);
     displayNews(data.articles);
   } catch (err) {
     console.log(err);
