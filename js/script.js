@@ -1,65 +1,61 @@
+const blogContainer = document.getElementById("blog-container");
 const apiKey = "00227680d6694ae6b55d4a957ad79874";
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
-async function fetchRandomNews() {
+async function fetchNews() {
   try {
     const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apiKey}`;
     const response = await fetch(apiUrl);
     const data = await response.json();
     displayNews(data.articles);
-  } catch (error) {
-    console.log("Error fetching random news: ", error);
+  } catch (err) {
+    console.log(err);
   }
 }
-searchButton.addEventListener("click", async () => {
-  const inputValue = searchInput.value;
-  if (inputValue !== "" && isNaN(inputValue)) {
-    try {
-      const apiUrl = `https://newsapi.org/v2/everything?q=${inputValue}&pageSize=10&apiKey=${apiKey}`;
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      displayNews(data.articles);
-    } catch (error) {
-      console.error("Error fetching random news: ", error);
-    }
-  } else {
-    alert(
-      "You can't give any number or empty input field. Please search a relevant news or article"
-    );
-  }
-});
-
 function displayNews(articles) {
-  const blogContainer = document.getElementById("blog-container");
   blogContainer.innerHTML = "";
-  blogContainer.innerHTML = articles
-
-    .map((article) => {
-      if (!(article.content === "[Removed]")) {
-        return `<div class="blog-card">
-          <img src="${article.urlToImage}" alt="image" />
-          <h2>${article.title}</h2>
-          <p>
-          ${article.description}
-          </p>
-        </div>`;
-      }
-      return "";
-    })
-    .join("");
-
-  const newsList = document.querySelectorAll(".blog-card");
-  newsList.forEach((singleNews) => {
-    singleNews.addEventListener("click", () => {
-      const img = singleNews.firstElementChild;
-      articles.forEach((article) => {
-        // console.log(img.src);
-        // console.log(article.urlToImage);
-        if (img.src === article.urlToImage) {
-          window.open(article.url, "_blank");
-        }
+  //   console.log(articles[0]);
+  articles.forEach((article) => {
+    if (article.content !== "[Removed]") {
+      const div = document.createElement("div");
+      const img = document.createElement("img");
+      const h2 = document.createElement("h2");
+      const p = document.createElement("p");
+      const publishDate = document.createElement("p");
+      publishDate.classList.add("publish");
+      div.classList.add("blog-card");
+      img.src = article.urlToImage;
+      h2.textContent = article.title;
+      p.textContent = article.description;
+      publishDate.textContent = `Date: ${
+        article.publishedAt
+          ? article.publishedAt.slice(0, 10)
+          : "date is expired"
+      }`;
+      div.appendChild(img);
+      div.appendChild(h2);
+      div.appendChild(p);
+      div.appendChild(publishDate);
+      div.addEventListener("click", () => {
+        window.open(article.url, "_blank");
       });
-    });
+      blogContainer.appendChild(div);
+    }
   });
 }
-window.addEventListener("load", () => fetchRandomNews());
+searchButton.addEventListener("click", async () => {
+  const searchValue = searchInput.value;
+  try {
+    const apiUrl = `https://newsapi.org/v2/everything?q=${searchValue}&pageSize=10&apiKey=${apiKey}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    console.log(data.articles[1]);
+    displayNews(data.articles);
+  } catch (err) {
+    console.log(err);
+  }
+});
+window.addEventListener("load", () => {
+  console.log("window loaded");
+  fetchNews();
+});

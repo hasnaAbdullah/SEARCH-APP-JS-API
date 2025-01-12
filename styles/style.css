@@ -15,6 +15,7 @@
 body {
   position: relative;
   background-color: var(--lightWhite);
+  font-family: "Fira Sans", serif;
 }
 .obj-width {
   max-width: 1200px;
@@ -89,4 +90,11 @@ nav {
 }
 .blog-card h2 {
   padding: 12px 0;
+}
+.blog-card .publish {
+  font-size: 14px;
+  margin-top: 10px;
+  color: rgba(14, 14, 14, 80%);
+  font-weight: 600;
+  color: crimson;
 }
