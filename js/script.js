@@ -8,7 +8,7 @@ async function fetchRandomNews() {
     const data = await response.json();
     displayNews(data.articles);
   } catch (error) {
-    console.error("Error fetching random news: ", error);
+    console.log("Error fetching random news: ", error);
   }
 }
 searchButton.addEventListener("click", async () => {
